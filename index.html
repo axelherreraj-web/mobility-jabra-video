@@ -46,7 +46,7 @@ gtag('config', 'AW-18420994186');
 :root{
 --bg:#0a0e14; --surface:#111823; --surface2:#18212e; --line:#233043;
 --txt:#e8eef6; --muted:#8fa0b5; --dim:#63748a;
---accent:#00c2e0; --accent-dk:#0097b0; --warn:#ffd200;
+--accent:#FFC000; --accent-dk:#E5AC00; --warn:#f0883e;
 --ok:#3ddc97;
 --r:16px; --rs:10px;
 --max:1180px;
@@ -67,20 +67,20 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* ---------- header ---------- */
 header{position:sticky;top:0;z-index:50;background:rgba(10,14,20,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .hd{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
-.brand{font-weight:700;letter-spacing:-.02em;font-size:1.05rem;text-decoration:none;white-space:nowrap}
+.brand{display:flex;align-items:center;text-decoration:none;flex:none}
+.brand img{height:34px;width:auto;display:block}
 @media(max-width:600px){
   .hd .btn{display:none}
-  .brand{font-size:.98rem}
+  .brand img{height:28px}
   .paises button{padding:6px 11px;font-size:.78rem}
 }
 section[id],#configurador,#cotizar,#aviso-privacidad{scroll-margin-top:74px}
-.brand span{color:var(--accent)}
 .hd-r{display:flex;align-items:center;gap:10px}
 .paises{display:flex;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px}
 .paises button{background:none;border:0;padding:6px 13px;border-radius:999px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:.18s}
-.paises button[aria-pressed="true"]{background:var(--accent);color:#06222a}
+.paises button[aria-pressed="true"]{background:var(--accent);color:#020617}
 .btn{display:inline-block;border:0;border-radius:var(--rs);padding:11px 20px;font-weight:650;font-size:.9rem;cursor:pointer;text-decoration:none;transition:.18s;text-align:center}
-.btn-p{background:var(--accent);color:#06222a}
+.btn-p{background:var(--accent);color:#020617}
 .btn-p:hover{background:#2ad4ef}
 .btn-g{background:transparent;color:var(--txt);border:1px solid var(--line)}
 .btn-g:hover{border-color:var(--accent);color:var(--accent)}
@@ -90,12 +90,12 @@ section[id],#configurador,#cotizar,#aviso-privacidad{scroll-margin-top:74px}
 /* ---------- hero ---------- */
 .hero{position:relative;padding:72px 0 60px;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:-30% 20% auto -10%;height:560px;
-background:radial-gradient(60% 60% at 30% 40%,rgba(0,194,224,.16),transparent 70%);pointer-events:none}
+background:radial-gradient(60% 60% at 30% 40%,rgba(255,192,0,.16),transparent 70%);pointer-events:none}
 .hero-g{display:grid;gap:44px;align-items:center;position:relative}
 @media(min-width:900px){.hero-g{grid-template-columns:1.05fr 1fr;gap:56px}}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.73rem;font-weight:700;letter-spacing:.09em;
-text-transform:uppercase;color:var(--accent);background:rgba(0,194,224,.1);
-border:1px solid rgba(0,194,224,.25);padding:6px 13px;border-radius:999px;margin-bottom:20px}
+text-transform:uppercase;color:var(--accent);background:rgba(255,192,0,.1);
+border:1px solid rgba(255,192,0,.25);padding:6px 13px;border-radius:999px;margin-bottom:20px}
 h1{font-size:clamp(2.1rem,5.2vw,3.35rem);line-height:1.08;letter-spacing:-.025em;font-weight:760;margin-bottom:20px}
 h1 em{font-style:normal;color:var(--accent)}
 .lead{font-size:1.1rem;color:var(--muted);max-width:52ch;margin-bottom:28px}
@@ -125,11 +125,11 @@ h2{font-size:clamp(1.55rem,3.4vw,2.2rem);line-height:1.18;letter-spacing:-.02em;
 .steps{display:flex;gap:7px;margin-bottom:30px;flex-wrap:wrap}
 .pill{display:flex;align-items:center;gap:7px;font-size:.76rem;font-weight:650;padding:6px 13px;border-radius:999px;
 border:1px solid var(--line);color:var(--dim);background:var(--surface2);transition:.2s}
-.pill.on{border-color:var(--accent);color:var(--accent);background:rgba(0,194,224,.1)}
+.pill.on{border-color:var(--accent);color:var(--accent);background:rgba(255,192,0,.1)}
 .pill.done{border-color:rgba(61,220,151,.35);color:var(--ok);background:rgba(61,220,151,.08)}
 .pill i{font-style:normal;width:18px;height:18px;border-radius:50%;background:#0a1018;border:1px solid currentColor;
 display:grid;place-items:center;font-size:.66rem;font-weight:800;flex:none;line-height:1}
-.pill.on i{background:var(--accent);color:#06222a;border-color:var(--accent)}
+.pill.on i{background:var(--accent);color:#020617;border-color:var(--accent)}
 .pill.done i{background:var(--ok);color:#06231a;border-color:var(--ok)}
 
 .q{font-size:1.16rem;font-weight:680;margin-bottom:6px;letter-spacing:-.01em}
@@ -139,7 +139,7 @@ display:grid;place-items:center;font-size:.66rem;font-weight:800;flex:none;line-
 .opt{position:relative;text-align:left;background:var(--surface2);border:1.5px solid var(--line);border-radius:var(--r);
 padding:18px;cursor:pointer;transition:.18s}
 .opt:hover{border-color:var(--accent-dk);transform:translateY(-2px)}
-.opt[aria-pressed="true"]{border-color:var(--accent);background:rgba(0,194,224,.08)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:rgba(255,192,0,.08)}
 .opt h4{font-size:1rem;font-weight:680;margin-bottom:4px}
 .opt .m{font-size:.8rem;color:var(--accent);font-weight:620;margin-bottom:8px;font-variant-numeric:tabular-nums}
 .opt .d{font-size:.83rem;color:var(--muted);line-height:1.45}
@@ -151,7 +151,7 @@ padding:18px;cursor:pointer;transition:.18s}
 
 /* resultado */
 .res{background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.res-top{padding:22px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(0,194,224,.1),transparent 60%)}
+.res-top{padding:22px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(255,192,0,.1),transparent 60%)}
 .res-top .kicker{margin-bottom:6px}
 .res-g{display:grid;gap:0}
 @media(min-width:760px){.res-g{grid-template-columns:260px 1fr}}
@@ -170,7 +170,7 @@ border-radius:var(--rs);padding:11px 13px;font-size:.83rem;color:#e8d9a0;margin-
 /* ---------- valor ---------- */
 .cards{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(265px,1fr))}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px}
-.card .ic{width:40px;height:40px;border-radius:10px;background:rgba(0,194,224,.12);
+.card .ic{width:40px;height:40px;border-radius:10px;background:rgba(255,192,0,.12);
 display:grid;place-items:center;margin-bottom:15px;color:var(--accent)}
 .card h3{font-size:1.06rem;font-weight:680;margin-bottom:8px;letter-spacing:-.01em}
 .card p{color:var(--muted);font-size:.92rem;line-height:1.55}
@@ -223,7 +223,7 @@ footer a:hover{color:var(--txt)}
 
 <header>
 <div class="wrap hd">
-<a href="#" class="brand">Mobility <span>Global</span></a>
+<a href="#" class="brand" aria-label="Mobility Global"><img src="assets/logo-mobility.png" alt="Mobility Global" width="429" height="120"></a>
 <div class="hd-r">
 <div class="paises" role="group" aria-label="País">
 <button type="button" id="btnMX" aria-pressed="true" onclick="setPais('MX')">🇲🇽 MX</button>
@@ -289,22 +289,22 @@ footer a:hover{color:var(--txt)}
 <p class="q-sub">Usamos las medidas oficiales de Jabra. Elige la que más se parezca.</p>
 <div class="opts">
 <button type="button" class="opt" data-v="personal" onclick="pick('tam','personal',this)">
-<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="44" y="24" width="32" height="20" rx="3" fill="#1b2635" stroke="#2e3f57"/><circle cx="60" cy="52" r="6" fill="#00c2e0" opacity=".5"/></svg>
+<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="44" y="24" width="32" height="20" rx="3" fill="#1b2635" stroke="#2e3f57"/><circle cx="60" cy="52" r="6" fill="#FFC000" opacity=".5"/></svg>
 <h4>Escritorio</h4><div class="m">2 × 2 m · 1 persona</div>
 <div class="d">Oficina personal o home office.</div>
 </button>
 <button type="button" class="opt" data-v="chica" onclick="pick('tam','chica',this)">
-<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="46" y="8" width="28" height="7" rx="2" fill="#2e3f57"/><ellipse cx="60" cy="40" rx="26" ry="14" fill="#1b2635" stroke="#2e3f57"/><circle cx="38" cy="32" r="4" fill="#00c2e0" opacity=".5"/><circle cx="82" cy="32" r="4" fill="#00c2e0" opacity=".5"/><circle cx="60" cy="58" r="4" fill="#00c2e0" opacity=".5"/></svg>
+<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="46" y="8" width="28" height="7" rx="2" fill="#2e3f57"/><ellipse cx="60" cy="40" rx="26" ry="14" fill="#1b2635" stroke="#2e3f57"/><circle cx="38" cy="32" r="4" fill="#FFC000" opacity=".5"/><circle cx="82" cy="32" r="4" fill="#FFC000" opacity=".5"/><circle cx="60" cy="58" r="4" fill="#FFC000" opacity=".5"/></svg>
 <h4>Huddle o sala chica</h4><div class="m">4,5 × 4,5 m · hasta 8</div>
 <div class="d">Sala de juntas pequeña o espacio de trabajo en equipo.</div>
 </button>
 <button type="button" class="opt" data-v="mediana" onclick="pick('tam','mediana',this)">
-<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="42" y="7" width="36" height="8" rx="2" fill="#2e3f57"/><rect x="30" y="30" width="60" height="18" rx="7" fill="#1b2635" stroke="#2e3f57"/><circle cx="24" cy="28" r="4" fill="#00c2e0" opacity=".5"/><circle cx="96" cy="28" r="4" fill="#00c2e0" opacity=".5"/><circle cx="40" cy="58" r="4" fill="#00c2e0" opacity=".5"/><circle cx="60" cy="58" r="4" fill="#00c2e0" opacity=".5"/><circle cx="80" cy="58" r="4" fill="#00c2e0" opacity=".5"/></svg>
+<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="42" y="7" width="36" height="8" rx="2" fill="#2e3f57"/><rect x="30" y="30" width="60" height="18" rx="7" fill="#1b2635" stroke="#2e3f57"/><circle cx="24" cy="28" r="4" fill="#FFC000" opacity=".5"/><circle cx="96" cy="28" r="4" fill="#FFC000" opacity=".5"/><circle cx="40" cy="58" r="4" fill="#FFC000" opacity=".5"/><circle cx="60" cy="58" r="4" fill="#FFC000" opacity=".5"/><circle cx="80" cy="58" r="4" fill="#FFC000" opacity=".5"/></svg>
 <h4>Sala mediana</h4><div class="m">6 × 4,5 m · hasta 12</div>
 <div class="d">Sala de juntas estándar de dirección o área.</div>
 </button>
 <button type="button" class="opt" data-v="grande" onclick="pick('tam','grande',this)">
-<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="38" y="6" width="44" height="9" rx="2" fill="#2e3f57"/><rect x="18" y="30" width="84" height="16" rx="7" fill="#1b2635" stroke="#2e3f57"/><circle cx="12" cy="27" r="3.5" fill="#00c2e0" opacity=".5"/><circle cx="108" cy="27" r="3.5" fill="#00c2e0" opacity=".5"/><circle cx="28" cy="57" r="3.5" fill="#00c2e0" opacity=".5"/><circle cx="46" cy="57" r="3.5" fill="#00c2e0" opacity=".5"/><circle cx="64" cy="57" r="3.5" fill="#00c2e0" opacity=".5"/><circle cx="82" cy="57" r="3.5" fill="#00c2e0" opacity=".5"/><circle cx="100" cy="57" r="3.5" fill="#00c2e0" opacity=".5"/></svg>
+<svg viewBox="0 0 120 70" aria-hidden="true"><rect x="2" y="2" width="116" height="66" rx="6" fill="#0d141d" stroke="#233043"/><rect x="38" y="6" width="44" height="9" rx="2" fill="#2e3f57"/><rect x="18" y="30" width="84" height="16" rx="7" fill="#1b2635" stroke="#2e3f57"/><circle cx="12" cy="27" r="3.5" fill="#FFC000" opacity=".5"/><circle cx="108" cy="27" r="3.5" fill="#FFC000" opacity=".5"/><circle cx="28" cy="57" r="3.5" fill="#FFC000" opacity=".5"/><circle cx="46" cy="57" r="3.5" fill="#FFC000" opacity=".5"/><circle cx="64" cy="57" r="3.5" fill="#FFC000" opacity=".5"/><circle cx="82" cy="57" r="3.5" fill="#FFC000" opacity=".5"/><circle cx="100" cy="57" r="3.5" fill="#FFC000" opacity=".5"/></svg>
 <h4>Sala grande</h4><div class="m">11 × 4,5 m · hasta 22</div>
 <div class="d">Auditorio, sala de consejo o capacitación.</div>
 </button>
@@ -364,7 +364,10 @@ footer a:hover{color:var(--txt)}
 <div class="res-g">
 <div class="res-img">
 <div class="slot" style="aspect-ratio:1/1;width:100%">
-<div class="slot-ph">
+<img id="resImg" src="" alt=""
+     style="width:100%;height:100%;object-fit:contain;padding:8%;display:block"
+     onerror="this.style.display='none';document.getElementById('resImgPh').style.display='flex'">
+<div class="slot-ph" id="resImgPh" style="display:none">
 <strong id="resImgName">Foto de producto</strong>
 <code id="resImgFile">assets/producto.png</code>
 <p>PNG transparente de la columna <b>Product</b> en YellowHub.</p>
@@ -727,6 +730,13 @@ function mostrarResultado(){
   document.getElementById('resImgName').textContent = eq.nombre;
   document.getElementById('resImgFile').textContent = 'assets/' + eq.img;
 
+  var resImg = document.getElementById('resImg');
+  var resPh  = document.getElementById('resImgPh');
+  resPh.style.display = 'none';
+  resImg.style.display = 'block';
+  resImg.alt = eq.nombre;
+  resImg.src = 'assets/' + eq.img;
+
   var ul = document.getElementById('resFeats');
   ul.innerHTML = '';
   for (var i=0;i<eq.feats.length;i++){
@@ -922,6 +932,206 @@ function submitLeadToZoho(){
 
 /* init */
 setPais('MX');
+</script>
+
+
+<!-- ================= CONSULTOR DE SALAS (Microsoft Copilot Studio) ================= -->
+<style>
+#mgBot{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+#mgBotPanel{display:none;width:min(92vw,380px);height:min(70vh,560px);background:var(--surface);
+border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -12px rgba(0,0,0,.7)}
+#mgBotPanel.on{display:block}
+#mgBotHead{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 14px;
+background:var(--surface2,#0d141d);border-bottom:1px solid var(--line)}
+#mgBotHead b{display:block;font-size:.8rem;font-weight:680;color:var(--txt)}
+#mgBotHead small{display:block;font-size:.68rem;color:var(--accent)}
+#mgBotHead button{background:none;border:0;color:var(--dim);font-size:1rem;cursor:pointer;padding:6px;line-height:1}
+#mgBotHead button:hover{color:var(--txt)}
+#mgBotFrame{width:100%;height:calc(100% - 52px);border:0;display:block}
+#mgBotTeaser{display:none;max-width:262px;position:relative;background:var(--surface);border:1px solid var(--line);
+border-radius:14px;border-bottom-right-radius:5px;padding:13px 15px;cursor:pointer;
+box-shadow:0 18px 44px -12px rgba(0,0,0,.65);opacity:0;transform:translateY(8px);transition:opacity .28s,transform .28s}
+#mgBotTeaser.on{display:block}
+#mgBotTeaser.vis{opacity:1;transform:none}
+#mgBotTeaser:hover{border-color:var(--accent)}
+#mgBotTeaser p{font-size:.79rem;color:var(--txt);line-height:1.45;padding-right:14px;margin:0}
+#mgBotTeaser .cta{font-size:.68rem;color:var(--accent);font-weight:680;margin-top:7px}
+#mgBotTeaser .x{position:absolute;top:5px;right:8px;background:none;border:0;color:var(--dim);font-size:.72rem;cursor:pointer;line-height:1;padding:3px}
+#mgBotBtn{display:flex;align-items:center;gap:10px;background:var(--accent);color:#020617;border:0;
+border-radius:999px;padding:11px 17px 11px 14px;cursor:pointer;font-family:inherit;
+box-shadow:0 0 0 2px rgba(255,192,0,.35),0 0 22px 2px rgba(255,192,0,.3),0 20px 44px -12px rgba(0,0,0,.6);
+transition:transform .18s}
+#mgBotBtn:hover{transform:scale(1.04)}
+#mgBotBtn .t{text-align:left;line-height:1.2}
+#mgBotBtn .t b{display:block;font-size:.76rem;font-weight:740;white-space:nowrap}
+#mgBotBtn .t span{display:block;font-size:.66rem;opacity:.78;white-space:nowrap}
+@media(max-width:600px){#mgBot{right:14px;bottom:14px}#mgBotBtn .t span{display:none}}
+@media(prefers-reduced-motion:reduce){#mgBotTeaser,#mgBotBtn{transition:none}}
+</style>
+
+<aside id="mgBot" aria-label="Consultor de Salas">
+  <div id="mgBotPanel" role="dialog" aria-label="Consultor de Salas">
+    <div id="mgBotHead">
+      <div>
+        <b>Consultor de Salas</b>
+        <small>&#9679; Respuesta inmediata &middot; 24/7</small>
+      </div>
+      <button type="button" onclick="mgBotToggle()" aria-label="Cerrar el consultor">&#10005;</button>
+    </div>
+    <iframe id="mgBotFrame" src="" title="Consultor de Salas"></iframe>
+  </div>
+
+  <div id="mgBotTeaser" onclick="mgBotDesdeTeaser()">
+    <button type="button" class="x" onclick="mgBotCerrarTeaser(event)" aria-label="Cerrar sugerencia">&#10005;</button>
+    <p id="mgBotTeaserTxt"></p>
+    <div class="cta">Preguntar al Consultor &rarr;</div>
+  </div>
+
+  <button type="button" id="mgBotBtn" onclick="mgBotToggle()" title="Consultor de Salas">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.05 21.5a.75.75 0 0 0 .95.95l4.332-1.388A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-3.5 9.5h7a1 1 0 1 1 0 2h-7a1 1 0 1 1 0-2zm0-3.5h7a1 1 0 1 1 0 2h-7a1 1 0 1 1 0-2z"/></svg>
+    <span class="t"><b>Consultor de Salas</b><span>&iquest;Qu&eacute; equipo necesita mi sala?</span></span>
+  </button>
+</aside>
+
+<script>
+/* ---------------------------------------------------------------
+   INTERRUPTOR: ponlo en false para ocultar el consultor sin borrar
+   nada. Util mientras se confirma que el bot ya sabe de video.
+   --------------------------------------------------------------- */
+var MG_BOT_VISIBLE = true;
+
+var MG_BOT_URL = "https://copilotstudio.microsoft.com/environments/Default-c0a498ff-6273-4f39-9f54-758f0377ef48/bots/cr528_asistentevirtualmobilityglo_csRZnd/webchat?__version__=2&enableFileAttachment=false&cliAgent=true";
+
+if (!MG_BOT_VISIBLE) { document.getElementById('mgBot').style.display = 'none'; }
+
+function mgBotCargar(){
+  var f = document.getElementById('mgBotFrame');
+  if (f && !f.getAttribute('src')) f.src = MG_BOT_URL;
+}
+
+function mgBotToggle(){
+  var p = document.getElementById('mgBotPanel');
+  var abriendo = !p.classList.contains('on');
+  p.classList.toggle('on', abriendo);
+  if (abriendo){
+    try { sessionStorage.setItem('mg_teaser_shown','1'); } catch(e){}
+    mgBotOcultarTeaser();
+    if (typeof gtag === 'function') gtag('event','bot_open',{event_category:'engagement',event_label:'Consultor de Salas'});
+    requestAnimationFrame(mgBotCargar);
+  }
+}
+
+/* precarga en segundo plano para que abra rapido */
+window.addEventListener('load', function(){ setTimeout(mgBotCargar, 2500); });
+
+/* ---------------- burbuja proactiva ---------------- */
+(function(){
+  var K_MOSTRADA = 'mg_teaser_shown', K_CERRADA = 'mg_teaser_dismissed';
+  var RETRASO_MIN = 10000, GUARDA_TECLEO = 5000, AUTO_OCULTA = 15000;
+  var teaser = document.getElementById('mgBotTeaser');
+  var txt = document.getElementById('mgBotTeaserTxt');
+  if (!teaser || !txt) return;
+
+  var cargada = Date.now(), ultimaTecla = 0, yaSalio = false, temporizador = null;
+
+  function bloqueada(){
+    if (yaSalio) return true;
+    if (!MG_BOT_VISIBLE) return true;
+    if (document.getElementById('mgBotPanel').classList.contains('on')) return true;
+    if (Date.now() - cargada < RETRASO_MIN) return true;
+    try { if (sessionStorage.getItem(K_MOSTRADA) || sessionStorage.getItem(K_CERRADA)) return true; } catch(e){}
+    return false;
+  }
+
+  function mostrar(mensaje, permiteFoco){
+    if (bloqueada()) return;
+    if (Date.now() - ultimaTecla < GUARDA_TECLEO) return;
+    var act = document.activeElement;
+    var enForm = act && (act.tagName === 'INPUT' || act.tagName === 'TEXTAREA' || act.tagName === 'SELECT');
+    if (enForm && !permiteFoco) return;
+    yaSalio = true;
+    try { sessionStorage.setItem(K_MOSTRADA,'1'); } catch(e){}
+    txt.textContent = mensaje;
+    teaser.classList.add('on');
+    requestAnimationFrame(function(){ teaser.classList.add('vis'); });
+    if (typeof gtag === 'function') gtag('event','bot_teaser_shown',{event_category:'engagement',event_label:mensaje});
+    temporizador = setTimeout(mgBotOcultarTeaser, AUTO_OCULTA);
+  }
+
+  window.mgBotOcultarTeaser = function(){
+    clearTimeout(temporizador);
+    teaser.classList.remove('vis');
+    setTimeout(function(){ teaser.classList.remove('on'); }, 300);
+  };
+
+  window.mgBotCerrarTeaser = function(ev){
+    ev.stopPropagation();
+    try { sessionStorage.setItem(K_CERRADA,'1'); } catch(e){}
+    if (typeof gtag === 'function') gtag('event','bot_teaser_dismissed',{event_category:'engagement'});
+    mgBotOcultarTeaser();
+  };
+
+  window.mgBotDesdeTeaser = function(){
+    if (typeof gtag === 'function') gtag('event','bot_teaser_click',{event_category:'engagement'});
+    mgBotOcultarTeaser();
+    mgBotToggle();
+  };
+
+  document.addEventListener('keydown', function(){ ultimaTecla = Date.now(); }, {passive:true});
+
+  /* 1. atorado en el configurador sin llegar a la recomendacion */
+  var cfg = document.getElementById('configurador');
+  if (cfg){
+    var dentro = 0, tic = null;
+    var obs = new IntersectionObserver(function(e){
+      if (e[0].isIntersecting){
+        tic = setInterval(function(){
+          dentro += 1000;
+          var terminado = document.querySelector('.cfg-step[data-step="5"]:not(.hidden)');
+          if (dentro >= 25000 && !terminado){
+            clearInterval(tic);
+            mostrar('¿No sabes en qué tamaño cae tu sala? Dime las medidas y te digo qué equipo le toca.');
+          }
+        }, 1000);
+      } else { clearInterval(tic); }
+    }, {threshold:.4});
+    obs.observe(cfg);
+  }
+
+  /* 2. paso la mitad de la pagina */
+  var disparoScroll = false;
+  window.addEventListener('scroll', function(){
+    if (disparoScroll) return;
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
+    if (pct > .5){
+      disparoScroll = true;
+      mostrar('¿Tu sala necesita una cámara o dos? Te lo resuelvo en un minuto.');
+    }
+  }, {passive:true});
+
+  /* 3. formulario abierto y abandonado */
+  var form = document.getElementById('cotizar');
+  if (form){
+    var reloj = null;
+    form.addEventListener('focusin', function(){
+      clearTimeout(reloj);
+      reloj = setTimeout(function(){
+        mostrar('¿Alguna duda antes de enviar? Te la contesto aquí mismo.', true);
+      }, 20000);
+    });
+    form.addEventListener('submit', function(){ clearTimeout(reloj); });
+  }
+
+  /* 4. intencion de salida, solo en escritorio */
+  if (window.innerWidth > 1024){
+    document.addEventListener('mouseout', function(e){
+      if (!e.relatedTarget && e.clientY <= 0){
+        mostrar('¿Te mando la comparativa de las PanaCast antes de que te vayas?');
+      }
+    });
+  }
+})();
 </script>
 
 </body>

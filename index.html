@@ -253,11 +253,15 @@ footer a:hover{color:var(--txt)}
 </div>
 
 <div class="slot">
-<!-- REEMPLAZAR: video contextual de producto en sala (YellowHub → PanaCast U30 → Product Video) -->
-<div class="slot-ph">
-<strong>Video de producto en sala</strong>
-<code>assets/hero-panacast.mp4</code>
-<p>YellowHub → Selling the Meeting Room Series → PanaCast U30 → video superior. Alternativa: imagen de la columna <b>Contextual</b>.</p>
+<img src="assets/hero-sala.jpg"
+     alt="Sala de juntas con una barra de video Jabra PanaCast instalada y participantes remotos en pantalla"
+     width="1200" height="750" fetchpriority="high"
+     style="width:100%;height:100%;object-fit:cover"
+     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+<div class="slot-ph" style="display:none">
+<strong>Falta la foto del hero</strong>
+<code>assets/hero-sala.jpg</code>
+<p>Sube la imagen con ese nombre exacto dentro de la carpeta <b>assets</b>.</p>
 </div>
 </div>
 </div>
@@ -597,7 +601,7 @@ var CATALOGO = {
   },
   chica_dedicada: {
     nombre:'Jabra PanaCast 40 VBS',
-    img:'panacast-40-vbs.png',
+    img:'panacast-40-vbs.jpg',
     porque:'Sala dedicada con controlador. Se entra a la reunión con un toque.',
     feats:[
       '180° de cobertura con dos cámaras panorámicas',
@@ -615,42 +619,43 @@ var CATALOGO = {
       '8 micrófonos con beamforming y 4 bocinas integradas',
       'Virtual Director: encuadra a quien habla, en tiempo real',
       'Pizarrón de doble flujo: se ve el pizarrón y la gente a la vez'
-    ]
+    ],
+    extra:'Se conecta por USB a la laptop de quien dirige la reunión. Sin cómputo de sala.'
   },
   mediana_dedicada: {
-    nombre:'Jabra PanaCast 50',
-    img:'panacast-50.png',
-    porque:'La misma barra, integrada a tu sistema de sala Teams Rooms o Zoom Rooms.',
+    nombre:'Jabra PanaCast 55 VBS',
+    img:'panacast-55-vbs.png',
+    porque:'Barra todo-en-uno con su propio cómputo y controlador de sala.',
     feats:[
-      '180° reales con tres cámaras de 13 MP y zoom 6x sin pérdida',
-      '8 micrófonos con beamforming y 4 bocinas integradas',
-      'Virtual Director y pizarrón de doble flujo',
-      'Se integra con el cómputo y controlador de sala que ya tengas'
-    ],
-    nota:'La configuración llave en mano de sala mediana está en transición de catálogo. Te confirmamos el paquete vigente al cotizar.'
+      'Cobertura panorámica con encuadre automático por IA',
+      'Cámara, micrófonos y bocinas integrados en la barra',
+      'Se entra a la reunión con un toque, sin depender de ninguna laptop',
+      'Certificada para Teams Rooms y Zoom Rooms'
+    ]
   },
   grande_byod: {
     nombre:'Jabra PanaCast 55 VBS',
     img:'panacast-55-vbs.png',
-    porque:'Cobertura y audio para salas de hasta 22 personas.',
+    porque:'La misma barra, con audio de expansión para que alcance a los del fondo.',
     feats:[
-      'Solución todo-en-uno para salas grandes',
-      'Audio de expansión opcional con PanaCast SpeakerMic',
-      'Compatible con Windows, Android, Teams y Zoom',
-      'Cobertura para hasta 22 personas'
+      'Cobertura para salas de hasta 22 personas',
+      'Se suma el PanaCast SpeakerMic inalámbrico para reforzar el audio',
+      'Encuadre automático que sigue a quien habla',
+      'Compatible con Windows, Android, Teams y Zoom'
     ],
-    extra:'En salas de más de 8 metros conviene sumar uno o dos SpeakerMic para que el audio alcance.'
+    extra:'En salas de más de 8 metros conviene sumar uno o dos SpeakerMic: la cámara alcanza, el micrófono de la barra no.'
   },
   grande_dedicada: {
-    nombre:'Jabra PanaCast Room Kit',
-    img:'panacast-room-kit.png',
-    porque:'Sala grande completa: video, audio de expansión y control.',
+    nombre:'Jabra PanaCast 55 VBS + SpeakerMic',
+    img:'panacast-55-vbs.png',
+    porque:'Sala grande completa: video panorámico y audio de expansión.',
     feats:[
-      'Kit completo para sala grande, listo para instalar',
-      'Audio de expansión con PanaCast SpeakerMic inalámbrico',
-      'Versión Room Kit Multi para salas alargadas o en L',
+      'Barra PanaCast 55 VBS más SpeakerMic inalámbrico',
+      'Cobertura de audio para los que quedan lejos de la barra',
+      'Arranque de reunión con un toque desde el controlador de sala',
       'Certificado para Teams Rooms y Zoom Rooms'
-    ]
+    ],
+    extra:'Según la forma de la sala se define cuántos SpeakerMic van. Lo calculamos al cotizar.'
   }
 };
 

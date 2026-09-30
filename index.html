@@ -177,6 +177,10 @@ display:grid;place-items:center;margin-bottom:15px;color:var(--accent)}
 
 /* ---------- prueba ---------- */
 .proof{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px}
+.demo{margin-top:26px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#000}
+.demo video{width:100%;height:auto;display:block;aspect-ratio:16/9;background:#000}
+.demo-pie{background:var(--surface2);border-top:1px solid var(--line);padding:11px 16px;font-size:.76rem;color:var(--muted)}
+.demo-pie b{color:var(--txt);font-weight:670}
 .casos{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:26px}
 .caso{background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;
 border-left:3px solid var(--accent)}
@@ -234,8 +238,8 @@ footer a:hover{color:var(--txt)}
 <a href="#" class="brand" aria-label="Mobility Global"><img src="assets/logo-mobility.png" alt="Mobility Global" width="429" height="120"></a>
 <div class="hd-r">
 <div class="paises" role="group" aria-label="País">
-<button type="button" id="btnMX" aria-pressed="true" onclick="setPais('MX')">🇲🇽 MX</button>
-<button type="button" id="btnCO" aria-pressed="false" onclick="setPais('CO')">🇨🇴 CO</button>
+<button type="button" id="btnMX" aria-pressed="true" onclick="setPais('MX', true)">🇲🇽 MX</button>
+<button type="button" id="btnCO" aria-pressed="false" onclick="setPais('CO', true)">🇨🇴 CO</button>
 </div>
 <a href="#configurador" class="btn btn-p">Arma tu sala</a>
 </div>
@@ -438,6 +442,17 @@ footer a:hover{color:var(--txt)}
 <div class="kicker">Quién lo instala</div>
 <h2 style="font-size:1.5rem">No vendemos la caja. Dejamos la sala funcionando.</h2>
 <p style="color:var(--muted);max-width:60ch;margin-top:10px">Mobility Global es integrador de TI con operación propia en México, Colombia y Estados Unidos. Levantamos la sala, la configuramos con tu plataforma y la dejamos probada.</p>
+
+<figure class="demo">
+<video controls preload="none" playsinline
+       poster="assets/jabra-video-poster.jpg"
+       width="1280" height="720"
+       aria-label="Demostración de una sala real con Jabra PanaCast 55 VBS y SpeakerMic">
+  <source src="assets/jabra-55vbs-demo-40s.mp4" type="video/mp4">
+  Tu navegador no puede reproducir este video.
+</video>
+<figcaption class="demo-pie"><b>Sala real, no render.</b> Sala de 7 metros con una PanaCast 55 VBS. El encuadre sigue a quien habla, y con el SpeakerMic la voz se escucha desde 11 metros. 40 segundos.</figcaption>
+</figure>
 
 <div class="casos">
 <article class="caso">
@@ -683,7 +698,55 @@ var ETIQ_SALAS = { '1':'1 sala', '2-5':'2 a 5 salas', '6-15':'6 a 15 salas', '16
 var ETIQ_PLAT = { teams:'Microsoft Teams', zoom:'Zoom', google:'Google Meet', varias:'Varias o por definir' };
 
 /* ================= PAIS ================= */
-function setPais(p){
+/* --------------------------------------------------------------
+   Deteccion de pais. Sin llamadas externas: la zona horaria del
+   equipo es la senal mas confiable que el navegador entrega solo.
+   El selector del header sigue mandando: si el visitante lo toca,
+   su eleccion gana y queda registrada como manual en el lead.
+   -------------------------------------------------------------- */
+var MG_TZ_MX = ['America/Mexico_City','America/Cancun','America/Merida','America/Monterrey',
+                'America/Matamoros','America/Chihuahua','America/Ciudad_Juarez','America/Ojinaga',
+                'America/Mazatlan','America/Bahia_Banderas','America/Hermosillo','America/Tijuana'];
+
+function mgDetectarPais(){
+  var tz = '';
+  try { tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || ''); } catch(e){}
+  if (tz === 'America/Bogota')     return { pais:'CO', via:'zona horaria', senal:tz };
+  if (MG_TZ_MX.indexOf(tz) !== -1) return { pais:'MX', via:'zona horaria', senal:tz };
+
+  var idiomas = '';
+  try { idiomas = (navigator.languages || [navigator.language || '']).join(','); } catch(e){}
+  if (/\bes-CO\b/i.test(idiomas))  return { pais:'CO', via:'idioma del navegador', senal:idiomas };
+  if (/\bes-MX\b/i.test(idiomas))  return { pais:'MX', via:'idioma del navegador', senal:idiomas };
+
+  return { pais:'MX', via:'sin senal, quedo el default', senal: tz || idiomas || 'ninguna' };
+}
+
+var MG_DETECCION = { pais:'MX', via:'pendiente', senal:'' };
+var MG_PAIS_MANUAL = false;
+
+function mgOrigenPais(){
+  if (MG_PAIS_MANUAL){
+    var coincide = MG_DETECCION.pais === pais;
+    return pais + ' (elegido por el visitante' +
+      (coincide ? '' : '; la deteccion decia ' + MG_DETECCION.pais + ' por ' +
+                       MG_DETECCION.via + ': ' + MG_DETECCION.senal) + ')';
+  }
+  return pais + ' (detectado por ' + MG_DETECCION.via + ': ' + MG_DETECCION.senal + ')';
+}
+
+/* El codigo de pais del telefono es la senal mas dura que hay.
+   Solo marca cuando el visitante escribio el prefijo explicitamente. */
+function mgTelefonoContradice(tel){
+  if (!tel) return null;
+  var t = tel.replace(/[\s()\-\.]/g, '');
+  if (/^\+?57\d{10}$/.test(t) && pais !== 'CO') return 'telefono de Colombia (+57) pero el pais quedo en MX';
+  if (/^\+?52\d{10}$/.test(t) && pais !== 'MX') return 'telefono de Mexico (+52) pero el pais quedo en CO';
+  return null;
+}
+
+function setPais(p, manual){
+  if (manual) MG_PAIS_MANUAL = true;
   pais = p;
   document.getElementById('btnMX').setAttribute('aria-pressed', p==='MX');
   document.getElementById('btnCO').setAttribute('aria-pressed', p==='CO');
@@ -915,6 +978,9 @@ function submitLeadToZoho(){
   if (notas && notas.length >= 5 && mgTextoSospechoso(notas)) raros.push('comentarios');
   var bandera = raros.length ? '[!! REVISAR - texto ilegible en: ' + raros.join(', ') + ']\n' : '';
 
+  var choque = mgTelefonoContradice(document.getElementById('Mobile').value);
+  if (choque) bandera += '[!! REVISAR PAIS - ' + choque + ']\n';
+
   var eq = CATALOGO[claveEquipo()];
   var cal = calificarVideo();
 
@@ -927,7 +993,7 @@ function submitLeadToZoho(){
     'Tipo: ' + (ETIQ_TIPO[cfg.tipo] || '-') + '\n' +
     'Cantidad de salas: ' + (ETIQ_SALAS[cfg.salas] || '-') + '\n' +
     'Plataforma: ' + (ETIQ_PLAT[cfg.plat] || '-') + '\n' +
-    'País: ' + pais + '\n' +
+    'País: ' + mgOrigenPais() + '\n' +
     'Comentarios: ' + (notas || '-');
 
   // SalesIQ visitor tracking
@@ -946,7 +1012,8 @@ function submitLeadToZoho(){
 }
 
 /* init */
-setPais('MX');
+MG_DETECCION = mgDetectarPais();
+setPais(MG_DETECCION.pais, false);
 </script>
 
 
@@ -1171,6 +1238,18 @@ border-radius:50%;cursor:pointer;font-size:.7rem;line-height:1}
 #mgWaCab button:hover{color:var(--txt)}
 #mgWaCuerpo{padding:18px}
 #mgWaCuerpo .intro{font-size:.78rem;color:var(--muted);margin-bottom:15px;line-height:1.5}
+#mgWaPais{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--surface2);border:1px solid var(--line);
+border-radius:11px;padding:10px 13px;margin-bottom:15px;font-size:.78rem}
+#mgWaPais .q{color:var(--muted)}
+#mgWaPais .v{color:var(--txt);font-weight:670}
+#mgWaPais button{margin-left:auto;background:none;border:0;color:var(--accent);font-family:inherit;
+font-size:.73rem;font-weight:670;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:2px}
+#mgWaPaisOpc{display:none;gap:8px;margin:-6px 0 15px}
+#mgWaPaisOpc.on{display:flex}
+#mgWaPaisOpc button{flex:1;background:var(--surface2);border:1px solid var(--line);border-radius:10px;
+padding:10px;font-family:inherit;font-size:.8rem;font-weight:650;color:var(--txt);cursor:pointer}
+#mgWaPaisOpc button:hover{border-color:#25D366}
+#mgWaPaisOpc button[aria-pressed="true"]{border-color:#25D366;background:rgba(37,211,102,.1)}
 #mgWaResumen{background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-bottom:15px;display:none}
 #mgWaResumen.on{display:block}
 #mgWaResumen .k{font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:5px}
@@ -1213,6 +1292,16 @@ margin:0 auto 13px;font-size:1.15rem;font-weight:800}
 
     <div id="mgWaCuerpo">
       <p class="intro">Dinos qui&eacute;n eres para llegarte con la respuesta correcta.</p>
+
+      <div id="mgWaPais">
+        <span class="q">Te atiende</span>
+        <span class="v" id="mgWaPaisTxt"></span>
+        <button type="button" onclick="mgWaPaisCambiar()" id="mgWaPaisBtn">No es mi pa&iacute;s</button>
+      </div>
+      <div id="mgWaPaisOpc">
+        <button type="button" onclick="mgWaFijarPais('MX')" id="mgWaOpcMX">&#127474;&#127485; M&eacute;xico</button>
+        <button type="button" onclick="mgWaFijarPais('CO')" id="mgWaOpcCO">&#127464;&#127476; Colombia</button>
+      </div>
 
       <div id="mgWaResumen">
         <div class="k">Tu configuraci&oacute;n</div>
@@ -1283,10 +1372,37 @@ function mgWaAbrir(){
   document.getElementById('mgWaCuerpo').style.display = '';
   document.getElementById('mgWaCargando').classList.remove('on');
   document.getElementById('mgWaOk').classList.remove('on');
+  document.getElementById('mgWaPaisOpc').classList.remove('on');
+  document.getElementById('mgWaPaisBtn').textContent = 'No es mi país';
+  mgWaPintarPais();
   document.getElementById('mgWaModal').classList.add('on');
   MG_WA_ABIERTO = Date.now();
   if (typeof gtag === 'function') gtag('event','wa_modal_open',{event_category:'engagement'});
   setTimeout(function(){ document.getElementById('mgWaNombre').focus(); }, 80);
+}
+
+function mgWaPintarPais(){
+  document.getElementById('mgWaPaisTxt').textContent =
+    pais === 'CO' ? 'el equipo de Colombia' : 'el equipo de México';
+  document.getElementById('mgWaOpcMX').setAttribute('aria-pressed', pais === 'MX');
+  document.getElementById('mgWaOpcCO').setAttribute('aria-pressed', pais === 'CO');
+}
+
+function mgWaPaisCambiar(){
+  var o = document.getElementById('mgWaPaisOpc');
+  var abriendo = !o.classList.contains('on');
+  o.classList.toggle('on', abriendo);
+  document.getElementById('mgWaPaisBtn').textContent = abriendo ? 'Cancelar' : 'No es mi país';
+}
+
+/* Corregir aqui es lo mismo que tocar el selector del header:
+   cuenta como eleccion manual y queda registrada en el lead. */
+function mgWaFijarPais(p){
+  setPais(p, true);
+  mgWaPintarPais();
+  document.getElementById('mgWaPaisOpc').classList.remove('on');
+  document.getElementById('mgWaPaisBtn').textContent = 'No es mi país';
+  if (typeof gtag === 'function') gtag('event','wa_pais_corregido',{event_category:'engagement', event_label:p});
 }
 
 function mgWaCerrar(){ document.getElementById('mgWaModal').classList.remove('on'); }
@@ -1325,6 +1441,10 @@ function mgWaContinuar(){
   var raros = [];
   if (mgTextoSospechoso(nombre, true)) raros.push('nombre');
   var bandera = raros.length ? '[!! REVISAR - texto ilegible en: ' + raros.join(', ') + ']\n' : '';
+  if (!esCorreo){
+    var choqueWa = mgTelefonoContradice(contacto);
+    if (choqueWa) bandera += '[!! REVISAR PAIS - ' + choqueWa + ']\n';
+  }
 
   document.getElementById('mgWaCuerpo').style.display = 'none';
   document.getElementById('mgWaCargando').classList.add('on');
@@ -1352,7 +1472,7 @@ function mgWaContinuar(){
     ? 'WhatsApp Colombia Jabra Video' : 'WhatsApp México Jabra Video');
   if (esCorreo) fd.append('Email', contacto); else fd.append('Mobile', contacto);
   fd.append('Description', bandera + '[LEAD WHATSAPP - landing de video]\n' + detalle +
-    '\nContacto proporcionado: ' + contacto + '.');
+    '\nContacto proporcionado: ' + contacto + '.' + '\nPaís: ' + mgOrigenPais());
   try { fetch('https://crm.zoho.com/crm/WebToLeadForm', {method:'POST', mode:'no-cors', body:fd}).catch(function(){}); } catch(e){}
 
   /* Este camino no pasa por gracias.html, así que necesita su propio evento de conversión. */

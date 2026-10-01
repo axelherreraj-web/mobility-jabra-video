@@ -897,6 +897,19 @@ function mgRegistrarEnvio(){
     sessionStorage.setItem('mg_envios', String(n+1));
   } catch(e){}
 }
+/* ================= GOOGLE ADS -> ZOHO (GCLID) =================
+   Identificador del clic de Google Ads. Zoho lo usa para ligar el lead con la campaña,
+   el anuncio, la palabra clave y el costo, y para regresar a Google Ads las ventas ganadas. */
+function mgGclid(){
+  try {
+    var m = location.search.match(/[?&]gclid=([^&#]+)/);
+    if (m) return decodeURIComponent(m[1]);
+    var c = document.cookie.match(/(?:^|; )gclid=([^;]*)/);
+    var v = c ? unescape(c[1]) : '';
+    return (v && v !== 'undefined') ? v : '';
+  } catch(e){ return ''; }
+}
+
 /* ================= UN SOLO REGISTRO POR PERSONA (mismo navegador) =================
    Si esta persona ya dejó sus datos (formulario o WhatsApp) desde este navegador en los
    últimos 30 días, no se crea otro lead en Zoho ni se cuenta otra conversión.
@@ -1044,6 +1057,7 @@ function submitLeadToZoho(){
 
   if (typeof gtag==='function') gtag('event','generate_lead',{nivel:cal.nivel, equipo:eq?eq.nombre:'-'});
 
+{ var mgZg = document.getElementById('zc_gad'); if (mgZg) mgZg.value = mgGclid(); }
   mgGuardarRegistro(correo, tel, 'formulario');
   return true; // POST nativo a Zoho -> redirige a gracias.html
 }
@@ -1499,7 +1513,7 @@ function mgWaContinuar(){
 
   var fd = new FormData();
   fd.append('xnQsjsdp','8845a052d9159becbb65207afc157d155d8adc90db9b0ddafd8a5b219499f553');
-  fd.append('zc_gad','');
+  fd.append('zc_gad', mgGclid());
   fd.append('xmIwtLD','30c4da60f5ec7b4138b4d56add1859c3682c11d1fc6ae2c3f3df013e5016339fa62cd6c37c0790064dd9b4efa251035a');
   fd.append('actionType','TGVhZHM=');
   fd.append('returnURL','https://jabravideo.mobilityglobal.net/gracias.html');
@@ -1544,5 +1558,7 @@ function mgWaContinuar(){
 }
 </script>
 
+<!-- Google Ads -> Zoho CRM: guarda el GCLID del clic y llena el campo zc_gad del formulario -->
+<script src="https://crm.zoho.com/crm/javascript/zcga.js"></script>
 </body>
 </html>

@@ -509,7 +509,7 @@ onsubmit="javascript:document.charset='UTF-8'; return submitLeadToZoho();" accep
 
 <input type="hidden" id="zoho_first_name" name="First Name" value="">
 <input type="hidden" id="zoho_last_name" name="Last Name" value="">
-<input type="hidden" id="zoho_country" name="Country" value="MX">
+<input type="hidden" id="zoho_country" name="Country" value="México">
 <input type="hidden" id="zoho_lead_source" name="Lead Source" value="Landing page México Jabra Video">
 <input type="hidden" id="zoho_description" name="Description" value="">
 
@@ -753,7 +753,8 @@ function setPais(p, manual){
   var f = p==='MX' ? 'Facturación CFDI' : 'Facturación DIAN';
   document.getElementById('tFact').textContent = f;
   document.getElementById('tFact2').textContent = p==='MX' ? 'CFDI' : 'DIAN';
-  document.getElementById('zoho_country').value = p;
+  /* Zoho asigna por País = "México" / "Colombia" (regla "Asignación Jabra por País"). */
+  document.getElementById('zoho_country').value = p==='CO' ? 'Colombia' : 'México';
   document.getElementById('zoho_lead_source').value = p==='MX'
     ? 'Landing page México Jabra Video'
     : 'Landing page Colombia Jabra Video';

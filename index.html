@@ -897,6 +897,36 @@ function mgRegistrarEnvio(){
     sessionStorage.setItem('mg_envios', String(n+1));
   } catch(e){}
 }
+/* ================= UN SOLO REGISTRO POR PERSONA (mismo navegador) =================
+   Si esta persona ya dejó sus datos (formulario o WhatsApp) desde este navegador en los
+   últimos 30 días, no se crea otro lead en Zoho ni se cuenta otra conversión.
+   Entre canales/dispositivos distintos, Zoho marca el duplicado (regla "Lead - detectar duplicado"). */
+var MG_YA_KEY = 'mg_lead_registrado', MG_YA_DIAS = 30;
+function mgNormTel(v){ var d = (v || '').replace(/\D/g,''); return d.length >= 10 ? d.slice(-10) : ''; }
+function mgNormCorreo(v){ return (v || '').trim().toLowerCase(); }
+function mgLeerRegistro(){
+  try {
+    var r = JSON.parse(localStorage.getItem(MG_YA_KEY) || 'null');
+    if (!r || !r.ts || (Date.now() - r.ts) > MG_YA_DIAS * 864e5) return null;
+    return r;
+  } catch(e){ return null; }
+}
+function mgYaRegistrado(correo, tel){
+  var r = mgLeerRegistro(); if (!r) return false;
+  var c = mgNormCorreo(correo), t = mgNormTel(tel);
+  return !!((c && r.correos.indexOf(c) !== -1) || (t && r.tels.indexOf(t) !== -1));
+}
+function mgGuardarRegistro(correo, tel, canal){
+  try {
+    var r = mgLeerRegistro() || {correos:[], tels:[], canales:[]};
+    var c = mgNormCorreo(correo), t = mgNormTel(tel);
+    if (c && r.correos.indexOf(c) === -1) r.correos.push(c);
+    if (t && r.tels.indexOf(t) === -1) r.tels.push(t);
+    if (r.canales.indexOf(canal) === -1) r.canales.push(canal);
+    r.ts = Date.now();
+    localStorage.setItem(MG_YA_KEY, JSON.stringify(r));
+  } catch(e){}
+}
 function mgTelefonoUsable(v){
   if (!v) return false;
   var d = (v.match(/\d/g) || []).length;
@@ -964,6 +994,11 @@ function submitLeadToZoho(){
     return false;
   }
 
+  if (mgYaRegistrado(correo, tel)){
+    alert('Ya tenemos tu solicitud registrada con estos datos. Tu asesor te contactará pronto; si quieres agregar algo, escríbenos por WhatsApp.');
+    return false; // no crea un segundo lead ni otra conversión
+  }
+
   isSubmittingLead = true;
   mgRegistrarEnvio();
 
@@ -1009,6 +1044,7 @@ function submitLeadToZoho(){
 
   if (typeof gtag==='function') gtag('event','generate_lead',{nivel:cal.nivel, equipo:eq?eq.nombre:'-'});
 
+  mgGuardarRegistro(correo, tel, 'formulario');
   return true; // POST nativo a Zoho -> redirige a gracias.html
 }
 
@@ -1437,7 +1473,9 @@ function mgWaContinuar(){
     mgWaCerrar();
     return;
   }
-  mgRegistrarEnvio();
+  /* Si ya se registró desde este navegador, solo abre WhatsApp: sin lead nuevo ni conversión. */
+  var yaRegistrado = esCorreo ? mgYaRegistrado(contacto, '') : mgYaRegistrado('', contacto);
+  if (!yaRegistrado) mgRegistrarEnvio();
 
   var raros = [];
   if (mgTextoSospechoso(nombre, true)) raros.push('nombre');
@@ -1474,10 +1512,13 @@ function mgWaContinuar(){
   if (esCorreo) fd.append('Email', contacto); else fd.append('Mobile', contacto);
   fd.append('Description', bandera + '[LEAD WHATSAPP - landing de video]\n' + detalle +
     '\nContacto proporcionado: ' + contacto + '.' + '\nPaís: ' + mgOrigenPais());
-  try { fetch('https://crm.zoho.com/crm/WebToLeadForm', {method:'POST', mode:'no-cors', body:fd}).catch(function(){}); } catch(e){}
+  if (!yaRegistrado){
+    try { fetch('https://crm.zoho.com/crm/WebToLeadForm', {method:'POST', mode:'no-cors', body:fd}).catch(function(){}); } catch(e){}
+    mgGuardarRegistro(esCorreo ? contacto : '', esCorreo ? '' : contacto, 'whatsapp');
+  }
 
   /* Este camino no pasa por gracias.html, así que necesita su propio evento de conversión. */
-  if (typeof gtag === 'function'){
+  if (!yaRegistrado && typeof gtag === 'function'){
     gtag('event','conversion',{
       'send_to':'AW-18420994186/y--xCOam1fscEIqh6M9E',
       'value':1.0,

@@ -436,7 +436,7 @@ footer a:hover{color:var(--txt)}
 </section>
 
 <!-- ================= PRUEBA ================= -->
-<section style="padding-top:0">
+<section id="casos" style="padding-top:0">
 <div class="wrap">
 <div class="proof">
 <div class="kicker">Quién lo instala</div>
@@ -509,7 +509,7 @@ onsubmit="javascript:document.charset='UTF-8'; return submitLeadToZoho();" accep
 
 <input type="hidden" id="zoho_first_name" name="First Name" value="">
 <input type="hidden" id="zoho_last_name" name="Last Name" value="">
-<input type="hidden" id="zoho_country" name="Country" value="México">
+<input type="hidden" id="zoho_country" name="Country" value="MX">
 <input type="hidden" id="zoho_lead_source" name="Lead Source" value="Landing page México Jabra Video">
 <input type="hidden" id="zoho_description" name="Description" value="">
 
@@ -584,7 +584,7 @@ onsubmit="javascript:document.charset='UTF-8'; return submitLeadToZoho();" accep
 <div>
 <h4>Colombia</h4>
 <p>Carrera 13A No. 89-38, Oficina 336<br>Edificio Nippon Center, Bogotá</p>
-<p style="margin-top:8px"><a href="tel:+573330334405">+57 333-033-4405</a></p>
+<p style="margin-top:8px"><a href="tel:+5715085890">+57 (1) 5085-890</a></p>
 <p style="margin-top:12px">
 <a href="https://www.linkedin.com/company/mobility-global/" target="_blank" rel="noopener">LinkedIn</a>
 <span style="color:var(--line);margin:0 6px">·</span>
@@ -753,8 +753,7 @@ function setPais(p, manual){
   var f = p==='MX' ? 'Facturación CFDI' : 'Facturación DIAN';
   document.getElementById('tFact').textContent = f;
   document.getElementById('tFact2').textContent = p==='MX' ? 'CFDI' : 'DIAN';
-  /* Zoho asigna por País = "México" / "Colombia" (regla "Asignación Jabra por País"). */
-  document.getElementById('zoho_country').value = p==='CO' ? 'Colombia' : 'México';
+  document.getElementById('zoho_country').value = p;
   document.getElementById('zoho_lead_source').value = p==='MX'
     ? 'Landing page México Jabra Video'
     : 'Landing page Colombia Jabra Video';

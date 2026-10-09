@@ -1001,11 +1001,7 @@ function submitLeadToZoho(){
     consent.focus();
     return false;
   }
-  if (!cfg.tam || !cfg.salas){
-    alert('Antes de cotizar, arma tu sala en el configurador de arriba.');
-    document.getElementById('configurador').scrollIntoView({behavior:'smooth'});
-    return false;
-  }
+  // El configurador es opcional: si no lo usaron, el lead entra igual y se marca para preguntar.
 
   if (mgYaRegistrado(correo, tel)){
     alert('Ya tenemos tu solicitud registrada con estos datos. Tu asesor te contactará pronto; si quieres agregar algo, escríbenos por WhatsApp.');
@@ -1026,6 +1022,8 @@ function submitLeadToZoho(){
   if (mgTextoSospechoso(empresa)) raros.push('empresa');
   if (notas && notas.length >= 5 && mgTextoSospechoso(notas)) raros.push('comentarios');
   var bandera = raros.length ? '[!! REVISAR - texto ilegible en: ' + raros.join(', ') + ']\n' : '';
+
+  if (!cfg.tam || !cfg.salas) bandera += '[SIN CONFIGURADOR - preguntar tamaño y número de salas]\n';
 
   var choque = mgTelefonoContradice(document.getElementById('Mobile').value);
   if (choque) bandera += '[!! REVISAR PAIS - ' + choque + ']\n';

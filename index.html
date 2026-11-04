@@ -1001,6 +1001,24 @@ function submitLeadToZoho(){
     consent.focus();
     return false;
   }
+
+      // --- Puerta B2B: no se envia sin senal de intencion real ---
+      if (!cfg.tam || !cfg.salas){
+        alert('Para cotizarte necesitamos el tamano de la sala y cuantas salas son. Usa el configurador de arriba, toma 30 segundos, o escribenos por WhatsApp.');
+        var mgCfgEl = document.querySelector('.cfg-step');
+        if (mgCfgEl && mgCfgEl.scrollIntoView) mgCfgEl.scrollIntoView({behavior:'smooth', block:'center'});
+        return false;
+      }
+      if (cfg.salas !== '1'){
+        var MG_GRATIS = ['gmail.com','hotmail.com','hotmail.es','outlook.com','outlook.es','yahoo.com','yahoo.com.mx','yahoo.es','live.com','live.com.mx','icloud.com','me.com','aol.com','protonmail.com','proton.me','msn.com','gmx.com','mail.com'];
+        var mgDom = correo.indexOf('@') > 0 ? correo.split('@')[1].toLowerCase().trim() : '';
+        if (!mgDom || MG_GRATIS.indexOf(mgDom) !== -1){
+          alert('Para proyectos de 2 salas o mas necesitamos un correo corporativo (no Gmail, Hotmail o similares). Si prefieres, escribenos por WhatsApp.');
+          document.getElementById('Email').focus();
+          return false;
+        }
+      }
+
   // El configurador es opcional: si no lo usaron, el lead entra igual y se marca para preguntar.
 
   if (mgYaRegistrado(correo, tel)){

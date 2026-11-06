@@ -779,6 +779,7 @@ function pick(campo, valor, el){
 }
 
 function goStep(n){
+  if (typeof gtag === 'function') gtag('event','configurador_paso',{paso:n,landing:'video'});
   var pasos = document.querySelectorAll('.cfg-step');
   for (var i=0;i<pasos.length;i++){
     pasos[i].classList.toggle('hidden', Number(pasos[i].dataset.step)!==n);
@@ -1008,6 +1009,7 @@ function submitLeadToZoho(){
         alert('Para cotizarte necesitamos el tamano de la sala y cuantas salas son. Usa el configurador de arriba, toma 30 segundos, o escribenos por WhatsApp.');
         var mgCfgEl = document.querySelector('.cfg-step');
         if (mgCfgEl && mgCfgEl.scrollIntoView) mgCfgEl.scrollIntoView({behavior:'smooth', block:'center'});
+        gtag('event','puerta_bloqueo',{motivo:'sin_configurador',landing:'video'});
         return false;
       }
       if (cfg.salas !== '1'){
@@ -1016,6 +1018,7 @@ function submitLeadToZoho(){
         if (!mgDom || MG_GRATIS.indexOf(mgDom) !== -1){
           alert('Para proyectos de 2 salas o mas necesitamos un correo corporativo (no Gmail, Hotmail o similares). Si prefieres, escribenos por WhatsApp.');
           document.getElementById('Email').focus();
+          gtag('event','puerta_bloqueo',{motivo:'salas_sin_correo',landing:'video'});
           return false;
         }
       }
@@ -1577,5 +1580,23 @@ function mgWaContinuar(){
 
 <!-- Google Ads -> Zoho CRM: guarda el GCLID del clic y llena el campo zc_gad del formulario -->
 <script src="https://crm.zoho.com/crm/javascript/zcga.js"></script>
+<script>
+/* Medicion GA4: el formulario entra en pantalla */
+(function(){
+  var f = document.getElementById('leadForm');
+  if (!f || !window.IntersectionObserver || typeof gtag !== 'function') return;
+  var visto = false;
+  var io = new IntersectionObserver(function(ents){
+    for (var i = 0; i < ents.length; i++) {
+      if (ents[i].isIntersecting && !visto) {
+        visto = true;
+        gtag('event', 'form_visible', { landing: 'video' });
+        io.disconnect();
+      }
+    }
+  }, { threshold: 0.3 });
+  io.observe(f);
+})();
+</script>
 </body>
 </html>

@@ -1169,7 +1169,7 @@ function mgBotToggle(){
   if (abriendo){
     try { sessionStorage.setItem('mg_teaser_shown','1'); } catch(e){}
     mgBotOcultarTeaser();
-    if (typeof gtag === 'function') gtag('event','bot_open',{event_category:'engagement',event_label:'Consultor de Salas'});
+if (typeof gtag === 'function') gtag('event', 'bot_open', { event_category: 'engagement', event_label: 'Consultor de Salas', origen: (window.__mgOrigen || 'otro'), landing: 'video' });
     requestAnimationFrame(mgBotCargar);
   }
 }
@@ -1602,33 +1602,24 @@ function mgWaContinuar(){
 <!-- Medicion GA4 del Consultor Evolve3 -->
 <script>
 (function(){
-  var panel = document.getElementById("mgBotPanel");
-  if (!panel) return;
-  var origen = "otro";
+  // Marca desde donde se abrio el Consultor; la lee el evento bot_open
+  window.__mgOrigen = "otro";
   document.addEventListener("click", function(e){
     var el = e.target && e.target.closest ? e.target.closest("button, a, #mgBotTeaser") : null;
     if (!el) return;
     var oc = el.getAttribute("onclick") || "";
-    if (el.id === "mgBotTeaser" || el.closest("#mgBotTeaser") || oc.indexOf("mgBotDesdeTeaser") !== -1) { origen = "burbuja"; return; }
-    if ((el.textContent || "").toLowerCase().indexOf("consultor") !== -1) { origen = "hero"; return; }
-    if (oc.indexOf("mgBotToggle") !== -1) { origen = "lanzador"; }
+    if (el.id === "mgBotTeaser" || el.closest("#mgBotTeaser") || oc.indexOf("mgBotDesdeTeaser") !== -1) { window.__mgOrigen = "burbuja"; return; }
+    if ((el.textContent || "").toLowerCase().indexOf("consultor") !== -1) { window.__mgOrigen = "hero"; return; }
+    if (oc.indexOf("mgBotToggle") !== -1) { window.__mgOrigen = "lanzador"; }
   }, true);
-  function visible(){ return !!panel.offsetParent; }
-  var estaba = visible();
-  function ev(nombre, extra){
-    if (typeof gtag !== "function") return;
-    var d = { landing: "video" };
-    for (var k in extra) { d[k] = extra[k]; }
-    gtag("event", nombre, d);
-  }
-  new MutationObserver(function(){
-    var vis = visible();
-    if (vis && !estaba) { ev("consultor_abierto", { origen: origen }); }
-    estaba = vis;
-  }).observe(panel, { attributes: true, attributeFilter: ["style","class"] });
+
+  // Cierran la burbuja sin abrir el Consultor: rechazo activo
   var cerrar = window.mgBotCerrarTeaser;
   if (typeof cerrar === "function") {
-    window.mgBotCerrarTeaser = function(){ ev("consultor_descartado", {}); return cerrar.apply(this, arguments); };
+    window.mgBotCerrarTeaser = function(){
+      if (typeof gtag === "function") { gtag("event", "consultor_descartado", { landing: "video" }); }
+      return cerrar.apply(this, arguments);
+    };
   }
 })();
 </script>

@@ -1598,5 +1598,39 @@ function mgWaContinuar(){
   io.observe(f);
 })();
 </script>
+
+<!-- Medicion GA4 del Consultor Evolve3 -->
+<script>
+(function(){
+  var panel = document.getElementById("mgBotPanel");
+  if (!panel) return;
+  var origen = "otro";
+  document.addEventListener("click", function(e){
+    var el = e.target && e.target.closest ? e.target.closest("button, a, #mgBotTeaser") : null;
+    if (!el) return;
+    var oc = el.getAttribute("onclick") || "";
+    if (el.id === "mgBotTeaser" || el.closest("#mgBotTeaser") || oc.indexOf("mgBotDesdeTeaser") !== -1) { origen = "burbuja"; return; }
+    if ((el.textContent || "").toLowerCase().indexOf("consultor") !== -1) { origen = "hero"; return; }
+    if (oc.indexOf("mgBotToggle") !== -1) { origen = "lanzador"; }
+  }, true);
+  function visible(){ return !!panel.offsetParent; }
+  var estaba = visible();
+  function ev(nombre, extra){
+    if (typeof gtag !== "function") return;
+    var d = { landing: "video" };
+    for (var k in extra) { d[k] = extra[k]; }
+    gtag("event", nombre, d);
+  }
+  new MutationObserver(function(){
+    var vis = visible();
+    if (vis && !estaba) { ev("consultor_abierto", { origen: origen }); }
+    estaba = vis;
+  }).observe(panel, { attributes: true, attributeFilter: ["style","class"] });
+  var cerrar = window.mgBotCerrarTeaser;
+  if (typeof cerrar === "function") {
+    window.mgBotCerrarTeaser = function(){ ev("consultor_descartado", {}); return cerrar.apply(this, arguments); };
+  }
+})();
+</script>
 </body>
 </html>
